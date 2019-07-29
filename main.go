@@ -3,10 +3,11 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Hello")
+	s := make([]int, 0)
+	fmt.Println(s)
+	s = append(s, 1, 2, 3, 4, 5)
+	fmt.Println(s)
+	s = s[:len(s)-1]
+	fmt.Println(s)
 
-	for i:= 0; i < 10; i++ {
-		defer fmt.Println(i)
-	}
-	fmt.Println("World")
 }

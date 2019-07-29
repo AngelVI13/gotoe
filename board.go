@@ -32,6 +32,25 @@ type Board interface {
 type TicTacToe struct {
 	pos [BoardSize]Player
 	playerJustMoved Player
-	history [BoardSize]int8
+	history []int8
 }
 
+func (b *TicTacToe) makeMove(move int8) {
+	b.playerJustMoved = -b.playerJustMoved
+	b.pos[move] = b.playerJustMoved
+	b.history = append(b.history, move)
+}
+
+func (b *TicTacToe) takeMove() {
+	if len(b.history) == 0 {
+		panic("History is empty")
+	}
+
+	lastElementIndex := len(b.history) - 1
+	lastElement := b.history[lastElementIndex]
+	b.pos[lastElement] = NoPlayer
+	b.playerJustMoved = -b.playerJustMoved
+
+	// remove last element from history
+	b.history = b.history[:lastElementIndex]
+}
