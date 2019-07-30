@@ -2,15 +2,10 @@ package main
 
 import "fmt"
 import board "local/gotoe/board"
+import uct "local/gotoe/uct"
 
 func main() {
 	b := board.CreateNewBoard()
-	fmt.Println(b)
-	b.MakeMove(2)
-	b.MakeMove(3)
-	b.MakeMove(4)
-	b.MakeMove(1)
-	b.MakeMove(6)
-	fmt.Println(b)
-	fmt.Println(b.GetResult(b.PlayerJustMoved))
+	rootnode := uct.CreateRootNode(&b)
+	fmt.Println(rootnode)
 }

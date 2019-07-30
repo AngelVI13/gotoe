@@ -9,6 +9,7 @@ type Board interface {
 	TakeMove()
 	GetMoves() []int // this should be some other type
 	GetResult(playerJM Player) Result // this should also be some other type
+	GetPlayerJustMoved() Player
 	String() string
 }
 
@@ -118,12 +119,17 @@ func (b *TicTacToe) GetResult(playerJM Player) Result {
 	}
 
 	for _, value := range b.pos {
-		if value != NoPlayer {
+		if value == NoPlayer {
 			return NoWinner // there are still available moves
 		}
 	}
 
 	return Draw  // there is no winner but also no available moves -> Draw
+}
+
+// GetPlayerJustMoved returns value of player just moved for Tic Tac Toe
+func (b *TicTacToe) GetPlayerJustMoved() Player {
+	return b.PlayerJustMoved
 }
 
 // CreateNewBoard returns a new instance of a board with default values
