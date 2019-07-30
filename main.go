@@ -1,13 +1,16 @@
 package main
 
 import "fmt"
+import board "local/gotoe/board"
 
 func main() {
-	s := make([]int, 0)
-	fmt.Println(s)
-	s = append(s, 1, 2, 3, 4, 5)
-	fmt.Println(s)
-	s = s[:len(s)-1]
-	fmt.Println(s)
-
+	b := board.CreateNewBoard()
+	fmt.Println(b)
+	b.MakeMove(2)
+	b.MakeMove(3)
+	b.MakeMove(4)
+	b.MakeMove(1)
+	b.MakeMove(6)
+	fmt.Println(b)
+	fmt.Println(b.GetResult(b.PlayerJustMoved))
 }
