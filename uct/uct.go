@@ -10,11 +10,17 @@ type rankedMove struct {
 	score float64
 }
 
-func uct(rootstate board.Board, itermax int) float64 {
+type moveScore struct {
+	wins float64
+	visits float64
+}
+
+func uct(rootstate board.Board, itermax int) moveScore {
 	rootnode := CreateRootNode(rootstate)
 
 	state := rootstate
 	for i := 0; i < itermax; i++ {
+		// fmt.Println(state)
 		node := &rootnode
 		movesToRoot := 0
 
@@ -68,13 +74,18 @@ func uct(rootstate board.Board, itermax int) float64 {
 	})
 	// above we sort by descending order -> move with most visits is the first element
 	bestMove := rootnode.childNodes[0]
-	return bestMove.wins / bestMove.visits
+	return moveScore { wins: bestMove.wins, visits: bestMove.visits }
 }
 
 // GetEngineMove returns the best move found by the UCT
 // Todo return int is not very flexible?
 func GetEngineMove(state board.Board, simulations int) int {
 	availableMoves := state.GetMoves()
+
+	if len(availableMoves) == 0 {
+		panic("Game is already over, can't get engine move for a finished game!")
+	}
+
 	simPerMove := simulations / len(availableMoves)
 
 	// todo BoardSize + 1 is not flexible
@@ -88,24 +99,27 @@ func GetEngineMove(state board.Board, simulations int) int {
 		   in which the value of the move should be immediately computed and
 		   put in the result from the view point of the enemy
 		   since here moves are evaluated from that viewpoint */
-		var score float64
+		var mScore moveScore
 		enemy := b.GetEnemy(b.GetPlayerJustMoved())
 		gameResult := b.GetResult(enemy)
 
 		if gameResult != board.NoWinner {
-			score = float64(gameResult) / 1.0
+			mScore = moveScore { wins: float64(gameResult), visits: 1.0 }
 		} else {
-			score = uct(b, simPerMove)
+			mScore = uct(b, simPerMove)
 		}
+		scoreValue := mScore.wins/mScore.visits
 
-		fmt.Printf("Move: %d: %f\n", move, score)
+		fmt.Printf("Move: %d: %.3f -> %f / %f\n", move, scoreValue, mScore.wins, mScore.visits)
 		// here the move_score refers to the best enemy reply
     	// therefore we want to minimize that i.e. chose the move
     	// which leads to the lowest scored best enemy reply
-		if score < bestMove.score {
-			bestMove.score = score
+		if scoreValue < bestMove.score {
+			bestMove.score = scoreValue
 			bestMove.move = move
 		}
+		// take move since b here is not a copy but points to the same position as state
+		b.TakeMove()
 	}
 	return bestMove.move
 }
