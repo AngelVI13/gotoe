@@ -19,7 +19,7 @@ var PlayerToString = map[Player]string{
 }
 
 // Result type indicates a predefined game result value used for MCTS (UCT) algorithm
-type Result float32
+type Result float64
 const (
 	// NoWinner value to indicate no winner
 	NoWinner Result = -1.0

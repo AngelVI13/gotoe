@@ -10,6 +10,7 @@ type Board interface {
 	GetMoves() []int // this should be some other type
 	GetResult(playerJM Player) Result // this should also be some other type
 	GetPlayerJustMoved() Player
+	GetEnemy(playerJM Player) Player
 	String() string
 }
 
@@ -130,6 +131,15 @@ func (b *TicTacToe) GetResult(playerJM Player) Result {
 // GetPlayerJustMoved returns value of player just moved for Tic Tac Toe
 func (b *TicTacToe) GetPlayerJustMoved() Player {
 	return b.PlayerJustMoved
+}
+
+// GetEnemy Returns the opposite player of the player provided to the func
+func (b *TicTacToe) GetEnemy(playerJM Player) Player {
+	switch playerJM {
+	case PlayerO: return PlayerX
+	case PlayerX: return PlayerO
+	default: return NoPlayer
+	}
 }
 
 // CreateNewBoard returns a new instance of a board with default values

@@ -6,6 +6,5 @@ import uct "local/gotoe/uct"
 
 func main() {
 	b := board.CreateNewBoard()
-	rootnode := uct.CreateRootNode(&b)
-	fmt.Println(rootnode)
+	fmt.Println(uct.GetEngineMove(&b, 10000))
 }

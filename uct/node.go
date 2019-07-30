@@ -22,9 +22,8 @@ func (n *Node) Update(gameResult float64) {
 }
 
 // AddChild adds child node from a given untried move under this node
-// todo return pointer to Node ?
 // note state here can be a pointer to struct
-func (n *Node) AddChild(move int, state board.Board) Node {
+func (n *Node) AddChild(move int, state board.Board) *Node {
 	node := Node {
 		move: move,
 		parent: n,
@@ -53,7 +52,7 @@ func (n *Node) AddChild(move int, state board.Board) Node {
 	n.untriedMoves[moveIdx] = n.untriedMoves[lastElementIdx]
 	n.untriedMoves = n.untriedMoves[:lastElementIdx]
 
-	return node
+	return &node
 }
 
 func (n *Node) ucb1(node *Node) float64 {
